@@ -5,6 +5,15 @@
 
 */
 
+//@thirdparty
+//third party functions with their credits
+
+//decode uint8
+function Decodeuint8arr(uint8array) {
+    return new TextDecoder("utf-8").decode(uint8array);
+}
+
+//@cookies
 //function to create shopping list cookie
 function createCookie(name, value) {
     //adds a cookie to the document with a given name and value
@@ -33,27 +42,85 @@ function deleteCookie(name) {
     document.cookie = `${name}=; max-age=0`;
 }
 
+//@options
 //grabs available search terms and print as checklist
 const printOptions = () => {
-    const container = document.getElementById("selection_container")
+    //fetch ingredients
     fetch("https://the-cocktail-db.p.rapidapi.com/list.php?i=list", {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
                 "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
             }
-        }) //grab all ingredients
-        .then(response => {
-            console.log(response);
         })
-        .catch(err => {
-            console.error(err);
-        });
+
+        .then(response => {
+            return response.body
+        })
+        // obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+
+        .then(body => {
+            const reader = body.getReader();
+            return new ReadableStream({
+                start(controller) {
+                    return pump();
+
+                    function pump() {
+                        return reader.read().then(({
+                            done,
+                            value
+                        }) => {
+                            // When no more data needs to be consumed, close the stream
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            // Enqueue the next data chunk into our target stream
+                            const data = Decodeuint8arr(value)
+                            console.log(data)
+                            const ingredientBox = document.getElementById("ingredient_box")
+                            for (let i = 0; i < data.length; i++) { //for each ingredient in each array add html for an option
+                                for (let t = 0; t < data[i].length; t++) {
+                                    const ingredient = eval(`data[${i}].${t}.strIngredient1`)
+                                    ingredientBox.innerHTML += `<option value="${ingredient}">${ingredient}</option>`
+                                }
+                            }
+                            return pump();
+                        });
+                    }
+                }
+            })
+        })
+        .catch(err => console.error(err));
+    //fetch categories
+    fetch("https://the-cocktail-db.p.rapidapi.com/list.php?c=list", {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+            "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
+        }
+    })
+    /*.then(response => {
+        return response.json().drinks
+    })
+    .then(data => {
+        const categoryBox = document.getElementById("category_box")
+        const categoryAmt = data.length
+        for (let i = 0; i < categoryAmt; i++) {
+            const category = data[i].strCategory;
+            categoryBox.innerHTML += category
+        }
+    })
+    .catch(err => {
+        console.error(err);
+    });*/
+
 }
 
+//@search
 const fetchSearch = () => { //grabs selected data and sends it to printCarousel
     const checkboxes = document.getElementsByClassName("checkbox")
-    const numBoxes = checkboxes.length();
+    const numBoxes = checkboxes.length;
     let searchParams = [];
     for (let i = 0; i < numBoxes; i++) { //look at each check box, if it's checked add it to params
         let currentCheckbox = checkboxes[i];
@@ -62,7 +129,7 @@ const fetchSearch = () => { //grabs selected data and sends it to printCarousel
         }
     }
     //turn params into fetch query format
-    const numParams = searchParams.length();
+    const numParams = searchParams.length;
     let formattedParam = `i=${searchParams[0]}`
     for (let i = 0; i < numParams; i++) {
         formattedParam += `%2C${searchParams[i]}`
@@ -93,16 +160,17 @@ const fetchSearch = () => { //grabs selected data and sends it to printCarousel
             }
         })
         .then(response => {
-            printCarousel(response.drinks); // call next function with data
+            printCarousel(response.json().drinks); // call next function with data
         })
         .catch(err => {
             console.error(err);
         });
 }
 
+//@carousel
 //print the carousel
 const printCarousel = (objArr) => {
-    for (let i = 0; i < objArr.length(); i++) {
+    for (let i = 0; i < objArr.length; i++) {
         if (objArr[i]) { //if it exists print it
             let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
             let drinkIngredients, drinkAmounts = []
@@ -115,7 +183,7 @@ const printCarousel = (objArr) => {
                     }
                 })
                 .then(response => {
-                    return response.drinks[i] //grab respective drink object
+                    return response.json().drinks[i] //grab respective drink object
                 })
                 .then(data => { // destructure array
                     drinkId = data.idDrink;
@@ -175,3 +243,6 @@ const printCarousel = (objArr) => {
         }
     }
 }
+
+//@main
+document.addEventListener("click", printOptions)
