@@ -8,6 +8,7 @@
 //@thirdparty
 //third party functions with their credits
 
+//obtained from https://ourcodeworld.com/articles/read/164/how-to-convert-an-uint8array-to-string-in-javascript on 1/19/22
 //decode uint8
 function Decodeuint8arr(uint8array) {
     return new TextDecoder("utf-8").decode(uint8array);
@@ -53,12 +54,10 @@ const printOptions = () => {
                 "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
             }
         })
-
+        // obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
         .then(response => {
             return response.body
         })
-        // obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
-
         .then(body => {
             const reader = body.getReader();
             return new ReadableStream({
@@ -75,67 +74,86 @@ const printOptions = () => {
                                 controller.close();
                                 return;
                             }
-                            // Enqueue the next data chunk into our target stream
-                            const data = Decodeuint8arr(value)
-                            console.log(data)
+                            const data = JSON.parse(Decodeuint8arr(value)).drinks
                             const ingredientBox = document.getElementById("ingredient_box")
                             for (let i = 0; i < data.length; i++) { //for each ingredient in each array add html for an option
-                                for (let t = 0; t < data[i].length; t++) {
-                                    const ingredient = eval(`data[${i}].${t}.strIngredient1`)
-                                    ingredientBox.innerHTML += `<option value="${ingredient}">${ingredient}</option>`
-                                }
+                                const ingredient = eval(`data[${i}].strIngredient1`)
+                                ingredientBox.innerHTML += `
+                                <option value="${ingredient}">${ingredient}</option>`
                             }
-                            return pump();
+                            ingredientBox.fstdropdown.rebind();
+                            controller.close()
                         });
                     }
                 }
             })
         })
         .catch(err => console.error(err));
-    //fetch categories
+    //fetch available categories
     fetch("https://the-cocktail-db.p.rapidapi.com/list.php?c=list", {
-        "method": "GET",
-        "headers": {
-            "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-            "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
-        }
-    })
-    /*.then(response => {
-        return response.json().drinks
-    })
-    .then(data => {
-        const categoryBox = document.getElementById("category_box")
-        const categoryAmt = data.length
-        for (let i = 0; i < categoryAmt; i++) {
-            const category = data[i].strCategory;
-            categoryBox.innerHTML += category
-        }
-    })
-    .catch(err => {
-        console.error(err);
-    });*/
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
+            }
+        })
+        // obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
+        .then(response => {
+            return response.body
+        })
+        .then(body => {
+            const reader = body.getReader();
+            return new ReadableStream({
+                start(controller) {
+                    return pump();
 
+                    function pump() {
+                        return reader.read().then(({
+                            done,
+                            value
+                        }) => {
+                            // When no more data needs to be consumed, close the stream
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            const data = JSON.parse(Decodeuint8arr(value)).drinks
+                            const categoryBox = document.getElementById("category_box")
+                            for (let i = 0; i < data.length; i++) { //for each category in each array add html for an option
+                                const category = eval(`data[${i}].strCategory`)
+                                categoryBox.innerHTML += `
+                                <option value="${category}">${category}</option>`
+                            }
+                            categoryBox.fstdropdown.rebind();
+                            controller.close()
+                        });
+                    }
+                }
+            })
+        })
+        .catch(err => console.error(err));
 }
-
-//@search
-const fetchSearch = () => { //grabs selected data and sends it to printCarousel
-    const checkboxes = document.getElementsByClassName("checkbox")
-    const numBoxes = checkboxes.length;
-    let searchParams = [];
-    for (let i = 0; i < numBoxes; i++) { //look at each check box, if it's checked add it to params
-        let currentCheckbox = checkboxes[i];
-        if (currentCheckbox.checked) {
-            searchParams.push(currentCheckbox.innerText)
+//grab parameters and format them into a query
+const formatQuery = () => {
+    const container = document.getElementById("selection_container")
+    //grab ingredients
+    const ingredientArray = container.children[3].selectedOptions
+    let searchParams = []
+    for (let i = 0; i < ingredientArray.length; i++) {
+        if (ingredientArray[i] !== "") {
+            searchParams[i] = ingredientArray[i].innerText
         }
     }
-    //turn params into fetch query format
-    const numParams = searchParams.length;
+    //turn ingredients into query
     let formattedParam = `i=${searchParams[0]}`
-    for (let i = 0; i < numParams; i++) {
+    for (let i = 1; i < searchParams.length; i++) {
         formattedParam += `%2C${searchParams[i]}`
     }
+    //grab category
+    const categoryVal = container.children[2].value
+
     //check if wants alcholic drink
-    const isAlcoholic = document.getElementById("alcohol_box").checked
+    /*const isAlcoholic = document.getElementById("alcohol_box").checked
     if (isAlcoholic) {
         formattedParam += "a=Alcoholic"
     } else {
@@ -143,16 +161,20 @@ const fetchSearch = () => { //grabs selected data and sends it to printCarousel
     }
     //check if wants cocktail or normal drink
     const isCocktail = document.getElementById("cocktail_box").checked
-    const isNotCocktail = document.getElementById("without_cocktail_box").checked
-    if (isCocktail && isNotCocktail) {
-        //ignore for both otherwise add respective param
-    } else if (isCocktail) {
+    if (isCocktail) {
         formattedParam += "c=Cocktail"
-    } else if (isNotCocktail) {
+    } else {
         formattedParam += "c=Ordinary_Drink"
     }
+    */
+    return formattedParam
+}
+
+//@search
+const fetchSearch = (formattedParam) => { //grabs selected data and sends it to printCarousel
     //fetch time 
-    fetch(`https://the-cocktail-db.p.rapidapi.com/filter.php?${formattedParam}`, {
+    const url = `https://the-cocktail-db.p.rapidapi.com/filter.php?${formattedParam}`
+    fetch(url, {
             "method": "GET",
             "headers": {
                 "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
@@ -160,11 +182,33 @@ const fetchSearch = () => { //grabs selected data and sends it to printCarousel
             }
         })
         .then(response => {
-            printCarousel(response.json().drinks); // call next function with data
+            return response.body
         })
-        .catch(err => {
-            console.error(err);
-        });
+        .then(body => {
+            const reader = body.getReader();
+            return new ReadableStream({
+                start(controller) {
+                    return pump();
+
+                    function pump() {
+                        return reader.read().then(({
+                            done,
+                            value
+                        }) => {
+                            // When no more data needs to be consumed, close the stream
+                            if (done) {
+                                controller.close();
+                                return;
+                            }
+                            const data = JSON.parse(Decodeuint8arr(value)).drinks
+                            printCarousel(data)
+                            controller.close()
+                        });
+                    }
+                }
+            })
+        })
+        .catch(err => console.error(err));
 }
 
 //@carousel
@@ -175,7 +219,8 @@ const printCarousel = (objArr) => {
             let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
             let drinkIngredients, drinkAmounts = []
             //lookup by id for full details
-            fetch(`https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${objArr[i].idDrink}`, {
+            const url = `https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${objArr[i].idDrink}`
+            fetch(url, {
                     "method": "GET",
                     "headers": {
                         "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
@@ -245,4 +290,11 @@ const printCarousel = (objArr) => {
 }
 
 //@main
-document.addEventListener("click", printOptions)
+fetchSearch("i=Vodka")
+window.addEventListener("load", printOptions)
+const form = document.getElementById("selection_container")
+form.addEventListener("submit", (evt) => {
+    evt.preventDefault()
+    fetchSearch(formatQuery());
+    form.reset()
+})
