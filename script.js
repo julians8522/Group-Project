@@ -14,6 +14,32 @@ function Decodeuint8arr(uint8array) {
     return new TextDecoder("utf-8").decode(uint8array);
 }
 
+//Carousel Event listener
+//obtained on 1/19/22 at https://azmind.com/bootstrap-carousel-multiple-items/
+function carouselEventListeners() {
+    $('#carousel-example').on('slide.bs.carousel', function (e) {
+        /*
+            CC 2.0 License Iatek LLC 2018 - Attribution required
+        */
+        var $e = $(e.relatedTarget);
+        var idx = $e.index();
+        var itemsPerSlide = 5;
+        var totalItems = $('.carousel-item').length;
+
+        if (idx >= totalItems - (itemsPerSlide - 1)) {
+            var it = itemsPerSlide - (totalItems - idx);
+            for (var i = 0; i < it; i++) {
+                // append slides to end
+                if (e.direction == "left") {
+                    $('.carousel-item').eq(i).appendTo('.carousel-inner');
+                } else {
+                    $('.carousel-item').eq(0).appendTo('.carousel-inner');
+                }
+            }
+        }
+    });
+}
+
 //@cookies
 //function to create shopping list cookie
 function createCookie(name, value) {
@@ -214,6 +240,7 @@ const fetchSearch = (formattedParam) => { //grabs selected data and sends it to 
 //@carousel
 //print the carousel
 const printCarousel = (objArr) => {
+    const container = document.getElementById("carousel_item_container")
     for (let i = 0; i < objArr.length; i++) {
         if (objArr[i]) { //if it exists print it
             let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
@@ -228,63 +255,58 @@ const printCarousel = (objArr) => {
                     }
                 })
                 .then(response => {
-                    return response.json().drinks[i] //grab respective drink object
+                    return response.body
                 })
-                .then(data => { // destructure array
-                    drinkId = data.idDrink;
-                    drinkName = data.strDrink;
-                    drinkTags = data.strTags;
-                    drinkCategory = data.strCategory;
-                    drinkInstructionsEN = data.strInstructions;
-                    drinkImageSource = data.strImageSource;
-                    for (let i = 0; i < 15; i++) {
-                        const ingredientPath = `data.strIngredient${i}`
-                        const curIngr = eval(ingredientPath)
-                        if (curIngr) {
-                            drinkIngredients[i] = curIngr //add drink ingredients if they exist
-                        }
-                        const amountPath = `data.strMeasure${i}`
-                        const curAmt = eval(amountPath)
-                        if (curAmt) {
-                            drinkAmounts[i] = curAmt //add amount of ingredient if they exist
-                        }
-                    }
+                .then(body => {
+                    const reader = body.getReader();
+                    return new ReadableStream({
+                        start(controller) {
+                            return pump();
 
+                            function pump() {
+                                return reader.read().then(({
+                                    done,
+                                    value
+                                }) => {
+                                    // When no more data needs to be consumed, close the stream
+                                    if (done) {
+                                        controller.close();
+                                        return;
+                                    }
+                                    const data = JSON.parse(Decodeuint8arr(value)).drinks[0]
+                                    console.log(data)
+                                    drinkId = data.idDrink;
+                                    drinkName = data.strDrink;
+                                    drinkTags = data.strTags;
+                                    drinkCategory = data.strCategory;
+                                    drinkInstructionsEN = data.strInstructions;
+                                    drinkImageSource = data.strDrinkThumb;
+                                    /*for (let i = 0; i < 15; i++) {
+                                        const ingredientPath = `data.strIngredient${i}`
+                                        const curIngr = eval(ingredientPath)
+                                        if (curIngr) {
+                                            drinkIngredients[i] = curIngr //add drink ingredients if they exist
+                                        }
+                                        const amountPath = `data.strMeasure${i}`
+                                        const curAmt = eval(amountPath)
+                                        if (curAmt) {
+                                            drinkAmounts[i] = curAmt //add amount of ingredient if they exist
+                                        }
+                                    }*/
+                                    //actually print to the carousel card
+                                    console.log(drinkCategory)
+                                    container.innerHTML += `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
+                                      <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
+                                      <p>${drinkInstructionsEN}</p>
+                                      </div>`
+                                    controller.close()
+                                });
+                            }
+                        }
+                    })
                 })
-                .catch(err => {
-                    console.error(err);
-                });
-            //actually print to the carousel card
-            //curCard.children[2].innerText = drinkInstructionsEN
-            const container = document.getElementById("carousel_item_container")
-            container.innerHTML = `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
-                <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
-             <p>${drinkInstructionsEN}</p>
-             </div>`
+                .catch(err => console.error(err));
             //printIngredients(drinkIngredients, drinkAmounts)
-            //Carousel Event listener
-            $('#carousel-example').on('slide.bs.carousel', function (e) {
-                /*
-                    CC 2.0 License Iatek LLC 2018 - Attribution required
-                    obtained on 1/19/22 at https://azmind.com/bootstrap-carousel-multiple-items/
-                */
-                var $e = $(e.relatedTarget);
-                var idx = $e.index();
-                var itemsPerSlide = 5;
-                var totalItems = $('.carousel-item').length;
-
-                if (idx >= totalItems - (itemsPerSlide - 1)) {
-                    var it = itemsPerSlide - (totalItems - idx);
-                    for (var i = 0; i < it; i++) {
-                        // append slides to end
-                        if (e.direction == "left") {
-                            $('.carousel-item').eq(i).appendTo('.carousel-inner');
-                        } else {
-                            $('.carousel-item').eq(0).appendTo('.carousel-inner');
-                        }
-                    }
-                }
-            });
         }
     }
 }
