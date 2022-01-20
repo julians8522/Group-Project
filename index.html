@@ -9,9 +9,47 @@
 	<script src="fstdropdown.js"></script>
 	<!--pretty sure this is supposed to go up here as it changes how elements render-->
 	<link rel="stylesheet" href="fstdropdown.css">
+	<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<div class="parallax-container">
+	<div class="parallax"><img src="https://i.imgur.com/iJV9V0D.jpg"></div>
+ </div>
+	<div class="yellow">
+		<div class="parallaxRow">
+		  <h1>Cocktail Connoisseur</h1><br>
+		  <p>For that time you're scrambling to plan an impomptu party, we present to you:  Cocktail Connoisseur.  This intuitive app can make you look like a professional mixologist by giving you curated cocktail recipes with only a few clicks.</p>
+		</div>
+	</div>
+<div class="parallax-container">
+	<div class="parallax"><img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1257&q=80"></div>
+</div>
+	<div class="yellow">
+		<div class="parallaxRow">
+			<p>The Cocktail Connoisseur was created by enterprising party planners Julian Simmerman, Michael Barrett, and Brit Nell in a mad rush to finish the massive project they'd planned.  There was also a bit of help from the Cocktail DB API, but not all of it.  Two dollars to get all their endpoint options from Patreon was too spendy for a bunch of students.</p>
+		</div>
+	</div>
+
+<div class="footer">&copy; 2022 by Julian Simmerman, Michael Barrett, and Brit Nell</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<!--<div id="selection_container">
 		<div class="form-check form-switch">
 			<input class="form-check-input" type="checkbox" role="switch" id="alcohol_box">
@@ -21,12 +59,12 @@
 			<input class="form-check-input" type="checkbox" role="switch" id="cocktail_box">
 			<label class="form-check-label" for="cocktail_box">Cocktail?</label>
 		</div>
-	</div>-->
+	</div>
 	<div id="info_container">
 		<div class="container-fluid">
 			<div id="carousel-example" class="carousel slide" data-ride="carousel">
 				<div id="carousel_item_container" class="carousel-inner row w-100 mx-auto" role="listbox">
-					<!--items get printed here-->
+					<!--items get printed here
 				</div>
 				<a class="carousel-control-prev" href="#carousel-example" role="button" data-slide="prev">
 					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -38,9 +76,14 @@
 				</a>
 			</div>
 		</div>
-	</div>
+	</div>-->
 	
 	<script src="script.js"></script>
+   <script>
+	 $(document).ready(function(){
+      $('.parallax').parallax();
+    });
+	</script>
 </body>
 
 </html>
