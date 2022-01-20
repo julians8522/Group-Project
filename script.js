@@ -360,6 +360,7 @@ async function fillInfo(id) {
 		});
 }
 
+
 //function to create shopping list cookie
 function createCookie(name, value) {
 	//adds a cookie to the document with a given name and value
