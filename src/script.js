@@ -121,7 +121,7 @@ const printOptions = () => {
 const formatQuery = () => {
     const container = document.getElementById("selection_container")
     //grab ingredients
-    const ingredientArray = container.children[3].selectedOptions
+    const ingredientArray = container.children[0].children[3].selectedOptions
     let searchParams = []
     for (let i = 0; i < ingredientArray.length; i++) {
         if (ingredientArray[i] !== "") {
@@ -134,7 +134,11 @@ const formatQuery = () => {
         formattedParam += `%2C${searchParams[i]}`
     }
     //grab category
-    const categoryVal = container.children[2].value
+    const categoryVal = container.children[0].children[2].value
+    if (categoryVal) {
+        formattedParam + -`&c=${categoryVal}`
+    }
+
 
     //check if wants alcholic drink
     const isAlcoholic = document.getElementById("alcohol_box").checked

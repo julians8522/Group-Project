@@ -23,23 +23,25 @@
 
 <body>
 	<form id="selection_container">
-		<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" role="switch" id="alcohol_box">
-			<label class="form-check-label" for="alcohol_box">Alcoholic?</label>
-		</div>
-		<div class="form-check form-switch">
-			<input class="form-check-input" type="checkbox" role="switch" id="cocktail_box">
-			<label class="form-check-label" for="cocktail_box">Cocktail?</label>
-		</div>
-		<select class="fstdropdown-select" id="category_box">
-			<option value="">Select your Category</option>
-			<!--categories printed here-->
-		</select>
-		<select class="fstdropdown-select" id="ingredient_box" multiple="multiple">
+		<div id="flex_container">
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="alcohol_box">
+				<label class="form-check-label" for="alcohol_box">Alcoholic?</label>
+			</div>
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="cocktail_box">
+				<label class="form-check-label" for="cocktail_box">Cocktail?</label>
+			</div>
+			<select class="fstdropdown-select" id="category_box">
+				<option value="">Select your Category</option>
+				<!--categories printed here-->
+			</select>
+			<select class="fstdropdown-select" id="ingredient_box" multiple="multiple">
 
-			<!--ingredients printed here-->
-		</select>
-		<button type="submit" id="form_submit_button">Search</button>
+				<!--ingredients printed here-->
+			</select>
+			<button type="submit" id="form_submit_button">Search</button>
+		</div>
 	</form>
 	<div id="info_container">
 		<div class="container-fluid">
