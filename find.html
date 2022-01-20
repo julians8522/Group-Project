@@ -1,53 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&family=Oswald&display=swap" rel="stylesheet">
-		<title>Cocktail Connoisseur</title>
-		<link rel="stylesheet" href="style.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	</head>
-	<body>
-		<div class="titleBoxDiv"><div id="titleBoxText">Cocktail Connoisseur</div></div>
-		
 
-<div class="navigationBox">
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Cocktail Connoisseur</title>
+	<script src="src/fstdropdown.js">
+	</script>
+	<link rel="stylesheet" href="styles/fstdropdown.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+		integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+		integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Dongle:wght@700&family=Oswald&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/css/animate.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/media-queries.css">
+	<link rel="stylesheet" href="assets/css/carousel.css">
+
+</head>
+
+<body>
+	<div class="navigationBox">
 		<a href="">home</a>
 		<a href="">recipes</a>
 		<a href="">shop</a>
-</div>
+	</div>
+	<form id="selection_container">
+		<div id="flex_container">
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="alcohol_box">
+				<label class="form-check-label" for="alcohol_box">Alcoholic?</label>
+			</div>
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="cocktail_box">
+				<label class="form-check-label" for="cocktail_box">Cocktail?</label>
+			</div>
+			<select class="fstdropdown-select" id="category_box">
+				<option value="">Select your Category</option>
+				<!--categories printed here-->
+			</select>
+			<select class="fstdropdown-select" id="ingredient_box" multiple="multiple">
 
-<div class="formBox">
-    <form>
-        <input type="checkbox" role="switch" id="vodka" name="liquor" value="vodka">
-        <label for="vodka">Vodka</label>
-        <input type="checkbox" role="switch" id="whiskey" name="liquor" value="whiskey">
-        <label for="whiskey">Whiskey</label>
-        <input type="checkbox" role="switch" id="gin" name="liquor" value="gin">
-        <label for="gin">Gin?</label>
-        <input type="checkbox" role="switch" name="random" id="random" value="random" checked>
-        <label for="random">Random</label>
-		<input type="submit" value="Search">
-		<input type="reset" value="Reset">
-    </form>
-</div>
-
-<div class="theList">
-	<ul>
-		<li>these</li>
-		<li>are</li>
-		<li>ingredients</li>
-	</ul>
-
-	<p>a go to google widget could go here?</p>
-</div>
-
-
-<div class="recipeCarouselDiv">
+				<!--ingredients printed here-->
+			</select>
+			<button type="submit" id="form_submit_button">Search</button>
+		</div>
+	</form>
 	<div id="info_container">
 		<div class="container-fluid">
 			<div id="carousel-example" class="carousel slide" data-ride="carousel">
@@ -64,18 +68,30 @@
 				</a>
 			</div>
 		</div>
-	</div>	
-</div> 
+	</div>
+	<div class="theList">
+		<ul>
+		</ul>
 
-<div class="recipesForReal">
-you click the carousel and shtuff goes here.
-</div>
+		<p>a go to google widget could go here?</p>
+	</div>
+	<div class="footer">
+		&copy; 2022 by Julian Simmerman, Michael Barrett, and Brit Nell
+	</div>
 
-<div class="footer">
-	&copy; 2022 by Julian Simmerman, Michael Barrett, and Brit Nell
-</div>
+	<script src="assets/js/jquery-3.3.1.min.js"></script>
+	<script src="assets/js/jquery-migrate-3.0.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+		integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous">
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+		integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous">
+	</script>
+	<script src="assets/js/jquery.backstretch.min.js"></script>
+	<script src="assets/js/wow.min.js"></script>
+	<script src="assets/js/scripts.js"></script>
+	<script src="src/script.js"></script>
 
-<script src="script.js"></script>
-	</body>
+</body>
+
 </html>
-
