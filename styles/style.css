@@ -7,7 +7,6 @@
 	background-size: cover;
 	width: 100%;
 	height: 400px;
-
 }
 
 #titleBoxText {
@@ -44,7 +43,6 @@ p {
 	margin-bottom: 20px;
 	font-family: "Oswald";
 }
-
 
 /* I don't eat hamburgers anyway so have a nav bar instead */
 .navigationBox {
@@ -96,7 +94,6 @@ p {
 	float: right;
 }
 
-
 /* for the recipes user saves */
 .recipesForReal {
 	width: 99%;
@@ -137,7 +134,6 @@ p {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-
 input[type="submit"],
 input[type="reset"] {
 	background-color: #691613;
@@ -185,9 +181,8 @@ body {
     CAROUSEL START*/
 
 @media (min-width: 768px) and (max-width: 991px) {
-
 	/* Show 4th slide on md if col-md-4*/
-	.carousel-inner .active.col-md-4.carousel-item+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-inner .active.col-md-4.carousel-item + .carousel-item + .carousel-item + .carousel-item {
 		position: absolute;
 		top: 0;
 		right: -33.3333%;
@@ -199,9 +194,8 @@ body {
 }
 
 @media (min-width: 576px) and (max-width: 768px) {
-
 	/* Show 3rd slide on sm if col-sm-6*/
-	.carousel-inner .active.col-sm-6.carousel-item+.carousel-item+.carousel-item {
+	.carousel-inner .active.col-sm-6.carousel-item + .carousel-item + .carousel-item {
 		position: absolute;
 		top: 0;
 		right: -50%;
@@ -218,12 +212,12 @@ body {
 	}
 
 	/* show 2 items */
-	.carousel-inner .active+.carousel-item {
+	.carousel-inner .active + .carousel-item {
 		display: block;
 	}
 
 	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
-	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item {
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item {
 		transition: none;
 	}
 
@@ -233,9 +227,9 @@ body {
 	}
 
 	/* left or forward direction */
-	.active.carousel-item-left+.carousel-item-next.carousel-item-left,
-	.carousel-item-next.carousel-item-left+.carousel-item,
-	.carousel-item-next.carousel-item-left+.carousel-item+.carousel-item {
+	.active.carousel-item-left + .carousel-item-next.carousel-item-left,
+	.carousel-item-next.carousel-item-left + .carousel-item,
+	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item {
 		position: relative;
 		transform: translate3d(-100%, 0, 0);
 		visibility: visible;
@@ -252,9 +246,9 @@ body {
 	}
 
 	/* right or prev direction */
-	.active.carousel-item-right+.carousel-item-prev.carousel-item-right,
-	.carousel-item-prev.carousel-item-right+.carousel-item,
-	.carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item {
+	.active.carousel-item-right + .carousel-item-prev.carousel-item-right,
+	.carousel-item-prev.carousel-item-right + .carousel-item,
+	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item {
 		position: relative;
 		transform: translate3d(100%, 0, 0);
 		visibility: visible;
@@ -265,13 +259,17 @@ body {
 
 /* MD */
 @media (min-width: 768px) {
-
 	/* show 3rd of 3 item slide */
-	.carousel-inner .active+.carousel-item+.carousel-item {
+	.carousel-inner .active + .carousel-item + .carousel-item {
 		display: block;
 	}
 
-	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item+.carousel-item {
+	/* show 3rd of 3 item slide */
+	.carousel-inner .active + .carousel-item + .carousel-item {
+		display: block;
+	}
+
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item {
 		transition: none;
 	}
 
@@ -281,14 +279,14 @@ body {
 	}
 
 	/* left or forward direction */
-	.carousel-item-next.carousel-item-left+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
 		position: relative;
 		transform: translate3d(-100%, 0, 0);
 		visibility: visible;
 	}
 
 	/* right or prev direction */
-	.carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item {
 		position: relative;
 		transform: translate3d(100%, 0, 0);
 		visibility: visible;
@@ -299,18 +297,22 @@ body {
 
 /* LG */
 @media (min-width: 991px) {
-
 	/* show 4th item */
-	.carousel-inner .active+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
 		display: block;
 	}
 
-	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item+.carousel-item+.carousel-item {
+	/* show 4th item */
+	.carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
+		display: block;
+	}
+
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item {
 		transition: none;
 	}
 
 	/* Show 5th slide on lg if col-lg-3 */
-	.carousel-inner .active.col-lg-3.carousel-item+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-inner .active.col-lg-3.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
 		position: absolute;
 		top: 0;
 		right: -25%;
@@ -321,14 +323,14 @@ body {
 	}
 
 	/* left or forward direction */
-	.carousel-item-next.carousel-item-left+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
 		position: relative;
 		transform: translate3d(-100%, 0, 0);
 		visibility: visible;
 	}
 
 	/* right or prev direction //t - previous slide direction last item animation fix */
-	.carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
+	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
 		position: relative;
 		transform: translate3d(100%, 0, 0);
 		visibility: visible;
@@ -338,3 +340,47 @@ body {
 }
 
 /* END OF CAROUSEL */
+
+/*styles made initially for popular page */
+.body {
+	background-color: navy;
+}
+.container {
+	display: flex;
+	background-color: rgb(127, 130, 167);
+	margin: auto;
+	padding: 0;
+	justify-content: space-between;
+}
+
+#popList {
+	margin: opx;
+	list-style: none;
+	max-width: 25%;
+	text-align: center;
+	background-color: rgb(111, 115, 170);
+}
+#popList a:link {
+	color: black;
+	text-decoration: none;
+}
+#popList a:hover {
+	text-decoration: underline;
+}
+#ingList {
+	margin: 5px;
+	display: block;
+	list-style: none;
+}
+#drinkContainer {
+	text-align: center;
+	max-width: 70%;
+}
+.info {
+	display: flex;
+	justify-content: space-evenly;
+}
+#instructions {
+	font-size: 1.25em;
+	margin: 5px;
+}
