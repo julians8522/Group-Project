@@ -5,7 +5,6 @@
 
 */
 
-<<<<<<< HEAD
 let drinkList = [];
 
 window.addEventListener("load", loadEvents);
@@ -360,9 +359,7 @@ async function fillInfo(id) {
 			console.error(err);
 		});
 }
-=======
 
->>>>>>> styles-in-theory
 
 //function to create shopping list cookie
 function createCookie(name, value) {
