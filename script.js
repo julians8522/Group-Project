@@ -4,8 +4,18 @@
     Authors: Brit, Julian, Michael
 
 */
-
-let drinkList = [];
+//global variables
+const absEnd = "https://ipgeolocation.abstractapi.com/v1/?api_key=e200bac17db8464584867ff0166e5641";
+const drinkByState = {
+	WI: "Old Fashioned",
+	SC: "Gin Fizz",
+	MI: "7 and 7",
+	"": "",
+	"": "",
+};
+let defaultDrink;
+let state, stateCode;
+let popList = [];
 
 window.addEventListener("load", loadEvents);
 
@@ -23,11 +33,12 @@ async function loadEvents() {
 	}
 }
 
+//update popular page with new info based which drink is clicked
 function updatePopular(evt) {
-	let drink, drId, name, img, type, glass, instruction;
-	for (let i = 0; i < drinkList.length; i++) {
-		if (evt.target.innerText === drinkList[i].strDrink) {
-			drink = drinkList[i];
+	let drink, name, img, type, glass, instruction;
+	for (let i = 0; i < popList.length; i++) {
+		if (evt.target.innerText === popList[i].strDrink) {
+			drink = popList[i];
 		}
 	}
 	drId = drink.idDrink;
@@ -136,7 +147,7 @@ function fillThumb() {
 		});
 }
 
-//150 lines of some innefficient bs
+//150 lines of some innefficient code filling ingredient list
 function fillIng(drink) {
 	//clear out any previous list before filling with new ingredients
 	document.getElementById("ingList").innerHTML = "";
@@ -293,7 +304,7 @@ function fillIng(drink) {
 }
 
 //fill a card with info on a drink
-async function fillInfo(id) {
+async function fillInfo() {
 	let drink, drId, name, img, type, glass, instruction;
 	document.getElementById("ingList").innerHTML = "";
 	//fetch a list of popular drinks
@@ -323,16 +334,16 @@ async function fillInfo(id) {
 							}
 							// Enqueue the next data chunk into our target stream
 							const data = JSON.parse(Decodeuint8arr(value));
-							drinkList = data.drinks;
-							for (let i = 0; i < drinkList.length; i++) {
+							popList = data.drinks;
+							for (let i = 0; i < popList.length; i++) {
 								let li = document.createElement("li");
-								li.innerHTML = `<a href=#>${drinkList[i].strDrink}</a>`;
+								li.innerHTML = `<a href=#>${popList[i].strDrink}</a>`;
 								li.style.border = "3px solid navy";
 								li.style.margin = "5px";
 								li.addEventListener("click", updatePopular);
 								document.getElementById("popList").appendChild(li);
 							}
-							drink = drinkList[0];
+							drink = popList[0];
 
 							drId = drink.idDrink;
 							name = drink.strDrink;
@@ -358,6 +369,24 @@ async function fillInfo(id) {
 		.catch((err) => {
 			console.error(err);
 		});
+}
+
+//search for a drink by name, returns drink object
+async function search(drinkName) {
+	fetch(absEnd)
+		.then((resp) => resp.json())
+		.then(function (obj) {
+			state = obj.region;
+			stateCode = obj.region_iso_code;
+		});
+	const response = await fetch(`https://rapidapi.p.rapidapi.com/search.php?s=${drinkName}`, { method: "GET", headers: { "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com", "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651" } });
+	const data = await response.json();
+	return data.drinks[0];
+}
+
+//sleep function for short delay
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 //function to create shopping list cookie
