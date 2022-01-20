@@ -353,6 +353,7 @@ async function fillInfo(dr) {
 		});
 }
 
+
 //search for a drink by name, returns drink object
 async function search(drinkName) {
 	fetch(absEnd)
@@ -370,6 +371,7 @@ async function search(drinkName) {
 function sleep(ms) {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
 
 //function to create shopping list cookie
 function createCookie(name, value) {
