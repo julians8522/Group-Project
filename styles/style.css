@@ -1,5 +1,5 @@
 
-/*saving hex codes for sake of sanity blue- #696D7D, green- #691613*/
+/* title, header, & font styles */
 
 .titleBoxDiv {
     border: 3px groove #691613;
@@ -16,6 +16,30 @@
     text-align: center;
     font-family: "Oswald";
     font-size: 48px;
+}
+h1 {
+    font-family: "Oswald";
+    color: #691613;
+    font-size: 48px;
+    text-align: center;
+}
+p {
+    font-family: "Oswald";
+    font-size: 16px;
+    text-indent: 20px;
+}
+
+/* parallax styles */
+.yellow {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: #f2a102;
+}
+.parallaxRow {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    font-family: "Oswald";
 }
 
 
@@ -304,3 +328,4 @@ body {
 }
 
 /* END OF CAROUSEL */
+
