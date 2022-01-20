@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>your drink</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container" style="display:flex">
+        <div class="card" style="width: 20rem;">
+            <img src="..." class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                    card's
+                    content.</p>
+            </div>
+        </div>
+        <ul id="ingList"></ul>
+    </div>
+    <script>
+        const drinkId = localStorage.getItem("drinkId")
+        const card = document.getElementsByClassName("card")[0]
+        console.log(drinkId)
+        const url = `https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${drinkId}`
+        fetch(url, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                    "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
+                }
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(body => {
+                const data = body.drinks[0]
+                console.log(data)
+                card.children[0].setAttribute("src", data.strDrinkThumb)
+                card.children[1].children[0].innerText = data.strDrink
+                if (data.strInstructions) {
+                    card.children[1].children[1].innerText = data.strInstructions
+                } else {
+                    card.children[1].children[1].innerText = "You already know what to do"
+                }
+                let drinkIngredients = []
+                let drinkAmounts = []
+                for (let t = 1; t < 16; t++) {
+                    let ingredientPath = `data.strIngredient${t}`
+                    if (eval(ingredientPath)) {
+                        const curIngr = eval(ingredientPath)
+                        drinkIngredients[t - 1] = curIngr //add drink ingredients if they exist
+                    }
+                    const amountPath = `data.strMeasure${t}`
+                    const curAmt = eval(amountPath)
+                    if (curAmt) {
+                        drinkAmounts[t - 1] = curAmt //add amount of ingredient if they exist
+                    }
+                }
+                printIngredients(drinkIngredients, drinkAmounts)
+            });
+        const printIngredients = (ingArr, amtArr) => {
+            //clear out any previous list before filling with new ingredients
+            document.getElementById("ingList").innerHTML = "";
+            let liElts = []
+            for (let i = 0; i < ingArr.length; i++) {
+                liElts[i] = document.createElement("li")
+                if (amtArr[i]) {
+                    liElts[i].innerText = `${amtArr[i]} `
+                }
+                liElts[i].innerText += ingArr[i]
+                document.getElementById("ingList").appendChild(liElts[i])
+
+            }
+        }
+    </script>
+</body>
+
+</html>
