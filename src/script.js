@@ -137,20 +137,20 @@ const formatQuery = () => {
     const categoryVal = container.children[2].value
 
     //check if wants alcholic drink
-    /*const isAlcoholic = document.getElementById("alcohol_box").checked
+    const isAlcoholic = document.getElementById("alcohol_box").checked
     if (isAlcoholic) {
-        formattedParam += "a=Alcoholic"
+        formattedParam += "&a=Alcoholic"
     } else {
-        formattedParam += "a=Non-Alcoholic"
+        formattedParam += "&a=Non-Alcoholic"
     }
     //check if wants cocktail or normal drink
     const isCocktail = document.getElementById("cocktail_box").checked
     if (isCocktail) {
-        formattedParam += "c=Cocktail"
+        formattedParam += "&c=Cocktail"
     } else {
-        formattedParam += "c=Ordinary_Drink"
+        formattedParam += "&c=Ordinary_Drink"
     }
-    */
+    console.log(formattedParam)
     return formattedParam
 }
 
@@ -170,6 +170,10 @@ const fetchSearch = (formattedParam) => { //grabs selected data and sends it to 
             return response.json()
         })
         .then(body => {
+            document.getElementById("carousel_item_container").innerHTML = `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
+                                      <img src="https://www.thecocktaildb.com/images/media/drink/utypqq1441554367.jpg" class="img-fluid mx-auto d-block" alt="TurfCoocktail">
+                                      <p>placeholder</p>
+                                      </div>`
             const data = body.drinks
             for (let i = 0; i < data.length; i++) {
 
@@ -186,12 +190,9 @@ const fetchSearch = (formattedParam) => { //grabs selected data and sends it to 
 //print the carousel
 const printCarousel = (obj) => {
     const container = document.getElementById("carousel_item_container")
-    container.innerHTML = `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3 active">
-                                      <img src="https://www.thecocktaildb.com/images/media/drink/utypqq1441554367.jpg" class="img-fluid mx-auto d-block" alt="TurfCoocktail">
-                                      <p>placeholder</p>
-                                      </div>`
     let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
-    let drinkIngredients, drinkAmounts = []
+    let drinkIngredients = []
+    let drinkAmounts = []
     //lookup by id for full details
     const url = `https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${obj.idDrink}`
     fetch(url, {
@@ -206,28 +207,29 @@ const printCarousel = (obj) => {
         })
         .then(body => {
             const data = body.drinks[0]
+            console.log(data)
             drinkId = data.idDrink;
             drinkName = data.strDrink;
             drinkTags = data.strTags;
             drinkCategory = data.strCategory;
             drinkInstructionsEN = data.strInstructions;
             drinkImageSource = data.strDrinkThumb;
-            /*for (let i = 0; i < 15; i++) {
-                const ingredientPath = `data.strIngredient${i}`
-                const curIngr = eval(ingredientPath)
-                if (curIngr) {
-                    drinkIngredients[i] = curIngr //add drink ingredients if they exist
+            for (let t = 1; t < 16; t++) {
+                let ingredientPath = `data.strIngredient${t}`
+                if (eval(ingredientPath)) {
+                    const curIngr = eval(ingredientPath)
+                    drinkIngredients[t - 1] = curIngr //add drink ingredients if they exist
                 }
-                const amountPath = `data.strMeasure${i}`
+                const amountPath = `data.strMeasure${t}`
                 const curAmt = eval(amountPath)
                 if (curAmt) {
-                    drinkAmounts[i] = curAmt //add amount of ingredient if they exist
+                    drinkAmounts[t - 1] = curAmt //add amount of ingredient if they exist
                 }
-            }*/
+            }
             //actually print to the carousel card
             container.innerHTML += `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3">
                                       <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
-                                      <p>${drinkInstructionsEN}</p>
+                                      <p>${drinkName}</p>
                                       </div>`
             //printIngredients(drinkIngredients, drinkAmounts)
         })
