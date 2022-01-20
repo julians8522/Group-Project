@@ -4,30 +4,40 @@
     Authors: Brit, Julian, Michael
 
 */
-
-let drinkList = [];
+//global variables
+const absEnd = "https://ipgeolocation.abstractapi.com/v1/?api_key=e200bac17db8464584867ff0166e5641";
+const drinkByState = { AL: "Bellini", AK: "White Russian", AZ: "Jack and Coke", AR: "Mojito", CA: "Paloma", CO: "Mimosa", CT: "Coquito", DE: "Manhattan", FL: "Pina Colada", GA: "Mimosa", HI: "Mai Tai", ID: "Hot Buttered Rum", IL: "Mimosa", IN: "Tequila Sunrise", IA: "Fuzzy Navel", KS: "Wine Cooler", KY: "Wine Cooler", LA: "Daiquiri", ME: "Rusty Nail", MD: "Mimosa", MA: "Painkiller", MI: "7 and 7", MN: "White Russian", MS: "Old Fashioned", MO: "Margarita", MT: "Dark N' Stormy", NE: "Moscow Mule", NV: "Shirley Temple", NH: "Margarita", NJ: "Pina Colada", NM: "Piña Colada", NY: "Vodka Fizz", NC: "Mimosa", ND: "Sex on the Beach", OH: "SHANDY", OK: "Bellini", OR: "Lemon Drop Martini", PA: "Wine Cooler", RI: "Dark N' Stormy", SC: "Gin Fizz", SD: "Screwdriver", TN: "Mimosa", TX: "Margarita", UT: "Rickey", VT: "Cosmopolitan", VA: "Mojito", WA: "Mojito", WV: "White Russian", WI: "Old Fashioned", WY: "Long Island Iced Tea" };
+let defaultDrink;
+let state, stateCode;
+let popList = [];
 
 window.addEventListener("load", loadEvents);
 
 //creates event listeners and performs other actions when page loads
 async function loadEvents() {
+	const resp = await fetch(absEnd);
+	const obj = await resp.json();
+	state = obj.region_iso_code;
+	let drink = drinkByState[state];
+
 	if (document.getElementById("randBtn")) {
 		//if the document has the random drink button
 		fillThumb();
 	}
 	if (document.getElementById("drinkContainer")) {
-		await fillInfo("none");
+		await fillInfo(drink);
 		for (let i = 0; i < document.getElementById("popList").children.length; i++) {
 			document.getElementById("popList").children[i].addEventListener("click", updatePopular);
 		}
 	}
 }
 
+//update popular page with new info based which drink is clicked
 function updatePopular(evt) {
-	let drink, drId, name, img, type, glass, instruction;
-	for (let i = 0; i < drinkList.length; i++) {
-		if (evt.target.innerText === drinkList[i].strDrink) {
-			drink = drinkList[i];
+	let drink, name, img, type, glass, instruction;
+	for (let i = 0; i < popList.length; i++) {
+		if (evt.target.innerText === popList[i].strDrink) {
+			drink = popList[i];
 		}
 	}
 	drId = drink.idDrink;
@@ -136,7 +146,7 @@ function fillThumb() {
 		});
 }
 
-//150 lines of some innefficient bs
+//150 lines of some innefficient code filling ingredient list
 function fillIng(drink) {
 	//clear out any previous list before filling with new ingredients
 	document.getElementById("ingList").innerHTML = "";
@@ -293,8 +303,8 @@ function fillIng(drink) {
 }
 
 //fill a card with info on a drink
-async function fillInfo(id) {
-	let drink, drId, name, img, type, glass, instruction;
+async function fillInfo(dr) {
+	let drink, name, img, type, glass, instruction;
 	document.getElementById("ingList").innerHTML = "";
 	//fetch a list of popular drinks
 	fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
@@ -305,59 +315,61 @@ async function fillInfo(id) {
 		},
 	})
 		.then((response) => {
-			return response.body;
+			return response.json();
 		})
-		// obtained on 1/19/22 at https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
-		.then((body) => {
-			const reader = body.getReader();
-			return new ReadableStream({
-				start(controller) {
-					return pump();
+		.then(async function (obj) {
+			popList = obj.drinks;
+			for (let i = 0; i < popList.length; i++) {
+				let li = document.createElement("li");
+				li.innerHTML = `<a href=#>${popList[i].strDrink}</a>`;
+				li.style.border = "3px solid navy";
+				li.style.margin = "5px";
+				li.addEventListener("click", updatePopular);
+				document.getElementById("popList").appendChild(li);
+			}
+			if (dr) {
+				drink = await search(dr);
+			}
+			if (drink === null) {
+				drink = popList[0];
+			}
 
-					function pump() {
-						return reader.read().then(({ done, value }) => {
-							// When no more data needs to be consumed, close the stream
-							if (done) {
-								controller.close();
-								return;
-							}
-							// Enqueue the next data chunk into our target stream
-							const data = JSON.parse(Decodeuint8arr(value));
-							drinkList = data.drinks;
-							for (let i = 0; i < drinkList.length; i++) {
-								let li = document.createElement("li");
-								li.innerHTML = `<a href=#>${drinkList[i].strDrink}</a>`;
-								li.style.border = "3px solid navy";
-								li.style.margin = "5px";
-								li.addEventListener("click", updatePopular);
-								document.getElementById("popList").appendChild(li);
-							}
-							drink = drinkList[0];
+			name = drink.strDrink;
+			img = drink.strDrinkThumb;
+			type = drink.strAlcoholic;
+			glass = drink.strGlass;
+			instruction = drink.strInstructions;
 
-							drId = drink.idDrink;
-							name = drink.strDrink;
-							img = drink.strDrinkThumb;
-							type = drink.strAlcoholic;
-							glass = drink.strGlass;
-							instruction = drink.strInstructions;
+			fillIng(drink);
 
-							fillIng(drink);
-
-							document.getElementById("drinkName").innerText = name;
-							document.getElementById("type").innerText = type;
-							document.getElementById("glass").innerText = glass;
-							document.getElementById("instructions").innerText = instruction;
-							document.getElementById("img").setAttribute("src", img);
-
-							return pump();
-						});
-					}
-				},
-			});
+			document.getElementById("drinkName").innerText = name;
+			document.getElementById("type").innerText = type;
+			document.getElementById("glass").innerText = glass;
+			document.getElementById("instructions").innerText = instruction;
+			document.getElementById("img").setAttribute("src", img);
 		})
 		.catch((err) => {
 			console.error(err);
 		});
+}
+
+
+//search for a drink by name, returns drink object
+async function search(drinkName) {
+	fetch(absEnd)
+		.then((resp) => resp.json())
+		.then(function (obj) {
+			state = obj.region;
+			stateCode = obj.region_iso_code;
+		});
+	const response = await fetch(`https://rapidapi.p.rapidapi.com/search.php?s=${drinkName}`, { method: "GET", headers: { "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com", "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651" } });
+	const data = await response.json();
+	return data.drinks[0];
+}
+
+//sleep function for short delay
+function sleep(ms) {
+	return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 
