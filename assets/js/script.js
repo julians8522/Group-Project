@@ -179,7 +179,6 @@ function fillThumb() {
         .then((body) => {
             const data = body.drinks;
             let randImg = data[0].strDrinkThumb;
-            console.log(randImg)
             document.getElementById("randBtn").setAttribute("src", randImg);
             randInfo = data[0].idDrink; //store drink id in case visitor wants more info
         })
@@ -199,7 +198,6 @@ function fillThumb() {
         })
         .then((body) => {
             const data = body.drinks
-            console.log(data);
             let recImg = data[0].strDrinkThumb;
             document.getElementById("recBtn").setAttribute("src", recImg);
             recInfo = data[0].idDrink; //store drink id in case visitor wants more info
@@ -387,7 +385,6 @@ const formatQuery = () => {
     } else {
         formattedParam += "&c=Ordinary_Drink"
     }
-    console.log(formattedParam)
     return formattedParam
 }
 
@@ -444,7 +441,6 @@ const printCarousel = (obj) => {
         })
         .then(body => {
             const data = body.drinks[0]
-            console.log(data)
             drinkId = data.idDrink;
             drinkName = data.strDrink;
             drinkTags = data.strTags;
@@ -467,8 +463,12 @@ const printCarousel = (obj) => {
             container.innerHTML += `<div id=${drinkId} class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3" onClick="makeCustomPage(${drinkId})">
                                       <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
                                       <p>${drinkName}</p>
-                                      <p>${drinkTags}</p>
                                       </div>`
+            if (drinkTags) {
+                const tagElt = document.createElement("p")
+                tagElt.innerText = drinkTags
+                document.getElementById(drinkId).appendChild(tagElt)
+            }
             //printIngredients(drinkIngredients, drinkAmounts)
         })
         .catch(err => console.error(err));
