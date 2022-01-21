@@ -162,49 +162,48 @@ function updatePopular(evt) {
 }
 //function to get a random cocktail image to fill into thumbnails
 function fillThumb() {
-	//fetch a random drink
-	fetch("https://the-cocktail-db.p.rapidapi.com/random.php", {
-		method: "GET",
-		headers: {
-			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-			"x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
-		},
-	})
-		.then((response) => {
-			return response.json();
-		})
-		.then((body) => {
-			const data = body.drinks;
-			let randImg = data[0].strDrinkThumb;
-			console.log(randImg);
-			document.getElementById("randBtn").setAttribute("src", randImg);
-			randInfo = data[0].idDrink; //store drink id in case visitor wants more info
-		})
-		.catch((err) => {
-			console.error(err);
-		});
-	//fetch a list of popular drinks
-	fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
-		method: "GET",
-		headers: {
-			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-			"x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
-		},
-	})
-		.then((response) => {
-			return response.json();
-		})
-		.then((body) => {
-			const data = body.drinks;
-			console.log(data);
-			let recImg = data[0].strDrinkThumb;
-			document.getElementById("recBtn").setAttribute("src", recImg);
-			recInfo = data[0].idDrink; //store drink id in case visitor wants more info
-			fillCard(recInfo);
-		})
-		.catch((err) => {
-			console.error(err);
-		});
+    //fetch a random drink
+    fetch("https://the-cocktail-db.p.rapidapi.com/random.php", {
+            method: "GET",
+            headers: {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+            },
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((body) => {
+            const data = body.drinks;
+            let randImg = data[0].strDrinkThumb;
+            document.getElementById("randBtn").setAttribute("src", randImg);
+            randInfo = data[0].idDrink; //store drink id in case visitor wants more info
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    //fetch a list of popular drinks
+    fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
+            method: "GET",
+            headers: {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+            },
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((body) => {
+            const data = body.drinks
+            let recImg = data[0].strDrinkThumb;
+            document.getElementById("recBtn").setAttribute("src", recImg);
+            recInfo = data[0].idDrink; //store drink id in case visitor wants more info
+            fillCard(recInfo);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+
 }
 //fill a card with info on a drink
 async function fillInfo(dr) {
@@ -368,24 +367,23 @@ const formatQuery = () => {
 	if (categoryVal) {
 		formattedParam + -`&c=${categoryVal}`;
 	}
+    //check if wants alcholic drink
+    const isAlcoholic = document.getElementById("alcohol_box").checked
+    if (isAlcoholic) {
+        formattedParam += "&a=Alcoholic"
+    } else {
+        formattedParam += "&a=Non-Alcoholic"
+    }
+    //check if wants cocktail or normal drink
+    const isCocktail = document.getElementById("cocktail_box").checked
+    if (isCocktail) {
+        formattedParam += "&c=Cocktail"
+    } else {
+        formattedParam += "&c=Ordinary_Drink"
+    }
+    return formattedParam
+}
 
-	//check if wants alcholic drink
-	const isAlcoholic = document.getElementById("alcohol_box").checked;
-	if (isAlcoholic) {
-		formattedParam += "&a=Alcoholic";
-	} else {
-		formattedParam += "&a=Non-Alcoholic";
-	}
-	//check if wants cocktail or normal drink
-	const isCocktail = document.getElementById("cocktail_box").checked;
-	if (isCocktail) {
-		formattedParam += "&c=Cocktail";
-	} else {
-		formattedParam += "&c=Ordinary_Drink";
-	}
-	console.log(formattedParam);
-	return formattedParam;
-};
 
 //@search
 const fetchSearch = (formattedParam) => {
@@ -423,53 +421,56 @@ const fetchSearch = (formattedParam) => {
 //@carousel
 //print the carousel
 const printCarousel = (obj) => {
-	const container = document.getElementById("carousel_item_container");
-	let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
-	let drinkIngredients = [];
-	let drinkAmounts = [];
-	//lookup by id for full details
-	const url = `https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${obj.idDrink}`;
-	fetch(url, {
-		method: "GET",
-		headers: {
-			"x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
-			"x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a",
-		},
-	})
-		.then((response) => {
-			return response.json();
-		})
-		.then((body) => {
-			const data = body.drinks[0];
-			console.log(data);
-			drinkId = data.idDrink;
-			drinkName = data.strDrink;
-			drinkTags = data.strTags;
-			drinkCategory = data.strCategory;
-			drinkInstructionsEN = data.strInstructions;
-			drinkImageSource = data.strDrinkThumb;
-			for (let t = 1; t < 16; t++) {
-				let ingredientPath = `data.strIngredient${t}`;
-				if (eval(ingredientPath)) {
-					const curIngr = eval(ingredientPath);
-					drinkIngredients[t - 1] = curIngr; //add drink ingredients if they exist
-				}
-				const amountPath = `data.strMeasure${t}`;
-				const curAmt = eval(amountPath);
-				if (curAmt) {
-					drinkAmounts[t - 1] = curAmt; //add amount of ingredient if they exist
-				}
-			}
-			//actually print to the carousel card
-			container.innerHTML += `<div id=${drinkId} class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3" onClick="makeCustomPage(${drinkId})">
+    const container = document.getElementById("carousel_item_container")
+    let drinkId, drinkName, drinkCategory, drinkTags, drinkInstructionsEN, drinkImageSource;
+    let drinkIngredients = []
+    let drinkAmounts = []
+    //lookup by id for full details
+    const url = `https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${obj.idDrink}`
+    fetch(url, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "51e4ca45e9msh1a0ceac8a334233p1adcf3jsn2cd977ff146a"
+            }
+        })
+        .then(response => {
+            return response.json()
+        })
+        .then(body => {
+            const data = body.drinks[0]
+            drinkId = data.idDrink;
+            drinkName = data.strDrink;
+            drinkTags = data.strTags;
+            drinkCategory = data.strCategory;
+            drinkInstructionsEN = data.strInstructions;
+            drinkImageSource = data.strDrinkThumb;
+            for (let t = 1; t < 16; t++) {
+                let ingredientPath = `data.strIngredient${t}`
+                if (eval(ingredientPath)) {
+                    const curIngr = eval(ingredientPath)
+                    drinkIngredients[t - 1] = curIngr //add drink ingredients if they exist
+                }
+                const amountPath = `data.strMeasure${t}`
+                const curAmt = eval(amountPath)
+                if (curAmt) {
+                    drinkAmounts[t - 1] = curAmt //add amount of ingredient if they exist
+                }
+            }
+            //actually print to the carousel card
+            container.innerHTML += `<div id=${drinkId} class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3" onClick="makeCustomPage(${drinkId})">
                                       <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
                                       <p>${drinkName}</p>
-                                      <p>${drinkTags}</p>
-                                      </div>`;
-			//printIngredients(drinkIngredients, drinkAmounts)
-		})
-		.catch((err) => console.error(err));
-};
+                                      </div>`
+            if (drinkTags) {
+                const tagElt = document.createElement("p")
+                tagElt.innerText = drinkTags
+                document.getElementById(drinkId).appendChild(tagElt)
+            }
+            //printIngredients(drinkIngredients, drinkAmounts)
+        })
+        .catch(err => console.error(err));
+}
 
 //takes arrays of ingredients and prints them]
 const printIngredients = (ingArr, amtArr) => {
