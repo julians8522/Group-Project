@@ -1,4 +1,4 @@
-/* title, header, & font styles */
+/*saving hex codes for sake of sanity blue- #696D7D, green- #691613*/
 
 .titleBoxDiv {
 	border: 3px groove #691613;
@@ -7,57 +7,14 @@
 	background-size: cover;
 	width: 100%;
 	height: 400px;
-<<<<<<< HEAD
-
 }
 
-=======
-}
-
->>>>>>> main
 #titleBoxText {
 	color: #f2a102;
 	padding-top: 10%;
 	text-align: center;
 	font-family: "Oswald";
 	font-size: 48px;
-}
-
-h1 {
-	font-family: "Oswald";
-	color: #691613;
-	font-size: 48px;
-	text-align: center;
-}
-
-p {
-	font-family: "Oswald";
-	font-size: 16px;
-	text-indent: 20px;
-}
-
-/* parallax styles */
-.yellow {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	background-color: #f2a102;
-<<<<<<< HEAD
-}
-
-.parallaxRow {
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 20px;
-	font-family: "Oswald";
-=======
->>>>>>> main
-}
-
-.parallaxRow {
-	margin-left: auto;
-	margin-right: auto;
-	margin-bottom: 20px;
-	font-family: "Oswald";
 }
 
 /* I don't eat hamburgers anyway so have a nav bar instead */
@@ -150,10 +107,7 @@ p {
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 input[type="submit"],
 input[type="reset"] {
 	background-color: #691613;
@@ -201,14 +155,9 @@ body {
     CAROUSEL START*/
 
 @media (min-width: 768px) and (max-width: 991px) {
-<<<<<<< HEAD
 
 	/* Show 4th slide on md if col-md-4*/
 	.carousel-inner .active.col-md-4.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-=======
-	/* Show 4th slide on md if col-md-4*/
-	.carousel-inner .active.col-md-4.carousel-item + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: absolute;
 		top: 0;
 		right: -33.3333%;
@@ -220,14 +169,9 @@ body {
 }
 
 @media (min-width: 576px) and (max-width: 768px) {
-<<<<<<< HEAD
 
 	/* Show 3rd slide on sm if col-sm-6*/
 	.carousel-inner .active.col-sm-6.carousel-item+.carousel-item+.carousel-item {
-=======
-	/* Show 3rd slide on sm if col-sm-6*/
-	.carousel-inner .active.col-sm-6.carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: absolute;
 		top: 0;
 		right: -50%;
@@ -244,20 +188,12 @@ body {
 	}
 
 	/* show 2 items */
-<<<<<<< HEAD
 	.carousel-inner .active+.carousel-item {
-=======
-	.carousel-inner .active + .carousel-item {
->>>>>>> main
 		display: block;
 	}
 
 	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
-<<<<<<< HEAD
 	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item {
-=======
-	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item {
->>>>>>> main
 		transition: none;
 	}
 
@@ -267,15 +203,9 @@ body {
 	}
 
 	/* left or forward direction */
-<<<<<<< HEAD
 	.active.carousel-item-left+.carousel-item-next.carousel-item-left,
 	.carousel-item-next.carousel-item-left+.carousel-item,
 	.carousel-item-next.carousel-item-left+.carousel-item+.carousel-item {
-=======
-	.active.carousel-item-left + .carousel-item-next.carousel-item-left,
-	.carousel-item-next.carousel-item-left + .carousel-item,
-	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item {
->>>>>>> main
 		position: relative;
 		transform: translate3d(-100%, 0, 0);
 		visibility: visible;
@@ -292,15 +222,9 @@ body {
 	}
 
 	/* right or prev direction */
-<<<<<<< HEAD
 	.active.carousel-item-right+.carousel-item-prev.carousel-item-right,
 	.carousel-item-prev.carousel-item-right+.carousel-item,
 	.carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item {
-=======
-	.active.carousel-item-right + .carousel-item-prev.carousel-item-right,
-	.carousel-item-prev.carousel-item-right + .carousel-item,
-	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item {
->>>>>>> main
 		position: relative;
 		transform: translate3d(100%, 0, 0);
 		visibility: visible;
@@ -311,25 +235,13 @@ body {
 
 /* MD */
 @media (min-width: 768px) {
-	/* show 3rd of 3 item slide */
-	.carousel-inner .active + .carousel-item + .carousel-item {
-		display: block;
-	}
 
 	/* show 3rd of 3 item slide */
-<<<<<<< HEAD
 	.carousel-inner .active+.carousel-item+.carousel-item {
 		display: block;
 	}
 
 	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item+.carousel-item {
-=======
-	.carousel-inner .active + .carousel-item + .carousel-item {
-		display: block;
-	}
-
-	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item {
->>>>>>> main
 		transition: none;
 	}
 
@@ -339,22 +251,14 @@ body {
 	}
 
 	/* left or forward direction */
-<<<<<<< HEAD
 	.carousel-item-next.carousel-item-left+.carousel-item+.carousel-item+.carousel-item {
-=======
-	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: relative;
 		transform: translate3d(-100%, 0, 0);
 		visibility: visible;
 	}
 
 	/* right or prev direction */
-<<<<<<< HEAD
 	.carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item+.carousel-item {
-=======
-	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: relative;
 		transform: translate3d(100%, 0, 0);
 		visibility: visible;
@@ -365,34 +269,18 @@ body {
 
 /* LG */
 @media (min-width: 991px) {
-	/* show 4th item */
-	.carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
-		display: block;
-	}
 
 	/* show 4th item */
-<<<<<<< HEAD
 	.carousel-inner .active+.carousel-item+.carousel-item+.carousel-item {
 		display: block;
 	}
 
 	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left)+.carousel-item+.carousel-item+.carousel-item {
-=======
-	.carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
-		display: block;
-	}
-
-	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		transition: none;
 	}
 
 	/* Show 5th slide on lg if col-lg-3 */
-<<<<<<< HEAD
 	.carousel-inner .active.col-lg-3.carousel-item+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-=======
-	.carousel-inner .active.col-lg-3.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: absolute;
 		top: 0;
 		right: -25%;
@@ -403,22 +291,14 @@ body {
 	}
 
 	/* left or forward direction */
-<<<<<<< HEAD
 	.carousel-item-next.carousel-item-left+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-=======
-	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: relative;
 		transform: translate3d(-100%, 0, 0);
 		visibility: visible;
 	}
 
 	/* right or prev direction //t - previous slide direction last item animation fix */
-<<<<<<< HEAD
 	.carousel-item-prev.carousel-item-right+.carousel-item+.carousel-item+.carousel-item+.carousel-item {
-=======
-	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
->>>>>>> main
 		position: relative;
 		transform: translate3d(100%, 0, 0);
 		visibility: visible;
@@ -427,15 +307,12 @@ body {
 	}
 }
 
-<<<<<<< HEAD
-/* END OF CAROUSEL */
-=======
 /* END OF CAROUSEL */
 
-/*styles made initially for popular page */
 .body {
 	background-color: navy;
 }
+
 .container {
 	display: flex;
 	background-color: rgb(127, 130, 167);
@@ -451,28 +328,33 @@ body {
 	text-align: center;
 	background-color: rgb(111, 115, 170);
 }
+
 #popList a:link {
 	color: black;
 	text-decoration: none;
 }
+
 #popList a:hover {
 	text-decoration: underline;
 }
+
 #ingList {
 	margin: 5px;
 	display: block;
 	list-style: none;
 }
+
 #drinkContainer {
 	text-align: center;
 	max-width: 70%;
 }
+
 .info {
 	display: flex;
 	justify-content: space-evenly;
 }
+
 #instructions {
 	font-size: 1.25em;
 	margin: 5px;
 }
->>>>>>> main
