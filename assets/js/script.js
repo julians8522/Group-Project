@@ -4,11 +4,70 @@
     Authors: Brit, Julian, Michael
 
 */
+//global variables
+const absEnd = "https://ipgeolocation.abstractapi.com/v1/?api_key=e200bac17db8464584867ff0166e5641";
+const drinkByState = {
+    AL: "Bellini",
+    AK: "White Russian",
+    AZ: "Jack and Coke",
+    AR: "Mojito",
+    CA: "Paloma",
+    CO: "Mimosa",
+    CT: "Coquito",
+    DE: "Manhattan",
+    FL: "Pina Colada",
+    GA: "Mimosa",
+    HI: "Mai Tai",
+    ID: "Hot Buttered Rum",
+    IL: "Mimosa",
+    IN: "Tequila Sunrise",
+    IA: "Fuzzy Navel",
+    KS: "Wine Cooler",
+    KY: "Wine Cooler",
+    LA: "Daiquiri",
+    ME: "Rusty Nail",
+    MD: "Mimosa",
+    MA: "Painkiller",
+    MI: "7 and 7",
+    MN: "White Russian",
+    MS: "Old Fashioned",
+    MO: "Margarita",
+    MT: "Dark N' Stormy",
+    NE: "Moscow Mule",
+    NV: "Shirley Temple",
+    NH: "Margarita",
+    NJ: "Pina Colada",
+    NM: "Piña Colada",
+    NY: "Vodka Fizz",
+    NC: "Mimosa",
+    ND: "Sex on the Beach",
+    OH: "SHANDY",
+    OK: "Bellini",
+    OR: "Lemon Drop Martini",
+    PA: "Wine Cooler",
+    RI: "Dark N' Stormy",
+    SC: "Gin Fizz",
+    SD: "Screwdriver",
+    TN: "Mimosa",
+    TX: "Margarita",
+    UT: "Rickey",
+    VT: "Cosmopolitan",
+    VA: "Mojito",
+    WA: "Mojito",
+    WV: "White Russian",
+    WI: "Old Fashioned",
+    WY: "Long Island Iced Tea"
+};
+let defaultDrink;
+let state, stateCode;
+let popList = [];
+
+window.addEventListener("load", (evt) => {
+    loadEvents()
+});
 
 //@thirdparty
 //third party functions with their credits
-
-
 //Carousel Event listener
 //obtained on 1/19/22 at https://azmind.com/bootstrap-carousel-multiple-items/
 function carouselEventListeners() {
@@ -38,34 +97,208 @@ function carouselEventListeners() {
 
 }
 
-//@cookies
-//function to create shopping list cookie
-function createCookie(name, value) {
-    //adds a cookie to the document with a given name and value
-    //can also be used to update a cookie
-    document.cookie = `${name}=${value};`;
-}
+//@events
+//creates event listeners and performs other actions when page loads
+async function loadEvents() {
+    const resp = await fetch(absEnd);
+    const obj = await resp.json();
+    state = obj.region_iso_code;
+    let drink = drinkByState[state];
 
-//function that uses cookies to recreate list
-function getCookie(name) {
-    //create an array of each cookie
-    let cookieArray = document.cookie.split(";");
-    //loop through array
-    for (let i = 0; i < cookieArray.length; i++) {
-        let pair = cookieArray[i].split("="); //splits string into 2 elements, the name and value
-        if (pair[0].trim() === name) {
-            //if the name is the same as the search query
-            return pair[1].trim(); //returns value of cookie
+    if (document.getElementById("randBtn")) {
+        //if the document has the random drink button
+        fillThumb();
+    }
+    if (document.getElementById("drinkContainer")) {
+        await fillInfo(drink);
+        for (let i = 0; i < document.getElementById("popList").children.length; i++) {
+            document.getElementById("popList").children[i].addEventListener("click", updatePopular);
         }
     }
-    return null; //null if provided name is not in cookie
+    if (document.getElementById("ingredient_box")) {
+        printOptions();
+    }
+    if (document.getElementById("selection_container")) {
+        document.getElementById("selection_container").addEventListener("submit", (evt) => {
+            evt.preventDefault()
+            fetchSearch(formatQuery());
+            document.getElementById("selection_container").reset()
+        })
+    }
 }
 
-//function to delete a cookie when given a name
-function deleteCookie(name) {
-    //sets value of cookie with name to nothing, and sets max-age to 0 so it deletes
-    document.cookie = `${name}=; max-age=0`;
+//RIP COOKIES
+//update popular page with new info based which drink is clicked
+function updatePopular(evt) {
+    let drink, name, img, type, glass, instruction;
+    let drinkIngredients = [];
+    let drinkAmounts = []
+    for (let i = 0; i < popList.length; i++) {
+        if (evt.target.innerText === popList[i].strDrink) {
+            drink = popList[i];
+        }
+    }
+    drId = drink.idDrink;
+    name = drink.strDrink;
+    img = drink.strDrinkThumb;
+    type = drink.strAlcoholic;
+    glass = drink.strGlass;
+    instruction = drink.strInstructions;
+    for (let t = 1; t < 16; t++) {
+        let ingredientPath = `data.strIngredient${t}`
+        if (eval(ingredientPath)) {
+            const curIngr = eval(ingredientPath)
+            drinkIngredients[t - 1] = curIngr //add drink ingredients if they exist
+        }
+        const amountPath = `data.strMeasure${t}`
+        const curAmt = eval(amountPath)
+        if (curAmt) {
+            drinkAmounts[t - 1] = curAmt //add amount of ingredient if they exist
+        }
+    }
+    printIngredients(drinkIngredients, drinkAmounts)
+    document.getElementById("drinkName").innerText = name;
+    document.getElementById("type").innerText = type;
+    document.getElementById("glass").innerText = glass;
+    document.getElementById("instructions").innerText = instruction;
+    document.getElementById("img").setAttribute("src", img);
 }
+//function to get a random cocktail image to fill into thumbnails
+function fillThumb() {
+    //fetch a random drink
+    fetch("https://the-cocktail-db.p.rapidapi.com/random.php", {
+            method: "GET",
+            headers: {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+            },
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((body) => {
+            const data = body.drinks;
+            let randImg = data[0].strDrinkThumb;
+            console.log(randImg)
+            document.getElementById("randBtn").setAttribute("src", randImg);
+            randInfo = data[0].idDrink; //store drink id in case visitor wants more info
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+    //fetch a list of popular drinks
+    fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
+            method: "GET",
+            headers: {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+            },
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then((body) => {
+            const data = body.drinks
+            console.log(data);
+            let recImg = data[0].strDrinkThumb;
+            document.getElementById("recBtn").setAttribute("src", recImg);
+            recInfo = data[0].idDrink; //store drink id in case visitor wants more info
+            fillCard(recInfo);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+}
+//fill a card with info on a drink
+async function fillInfo(dr) {
+    let drink, name, img, type, glass, instruction;
+    let drinkAmounts = [];
+    let drinkIngredients = []
+    document.getElementById("ingList").innerHTML = "";
+    //fetch a list of popular drinks
+    fetch("https://the-cocktail-db.p.rapidapi.com/popular.php", {
+            method: "GET",
+            headers: {
+                "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+                "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651",
+            },
+        })
+        .then((response) => {
+            return response.json();
+        })
+        .then(async function (obj) {
+            popList = obj.drinks;
+            for (let i = 0; i < popList.length; i++) {
+                let li = document.createElement("li");
+                li.innerHTML = `<a href=#>${popList[i].strDrink}</a>`;
+                li.style.border = "3px solid navy";
+                li.style.margin = "5px";
+                li.addEventListener("click", updatePopular);
+                document.getElementById("popList").appendChild(li);
+            }
+            if (dr) {
+                drink = await search(dr);
+            }
+            if (drink === null) {
+                drink = popList[0];
+            }
+
+            name = drink.strDrink;
+            img = drink.strDrinkThumb;
+            type = drink.strAlcoholic;
+            glass = drink.strGlass;
+            instruction = drink.strInstructions;
+
+            for (let t = 1; t < 16; t++) {
+                let ingredientPath = `drink.strIngredient${t}`
+                if (eval(ingredientPath)) {
+                    const curIngr = eval(ingredientPath)
+                    drinkIngredients[t - 1] = curIngr //add drink ingredients if they exist
+                }
+                const amountPath = `drink.strMeasure${t}`
+                const curAmt = eval(amountPath)
+                if (curAmt) {
+                    drinkAmounts[t - 1] = curAmt //add amount of ingredient if they exist
+                }
+            }
+            printIngredients(drinkIngredients, drinkAmounts);
+
+            document.getElementById("drinkName").innerText = name;
+            document.getElementById("type").innerText = type;
+            document.getElementById("glass").innerText = glass;
+            document.getElementById("instructions").innerText = instruction;
+            document.getElementById("img").setAttribute("src", img);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+}
+
+
+//search for a drink by name, returns drink object
+async function search(drinkName) {
+    fetch(absEnd)
+        .then((resp) => resp.json())
+        .then(function (obj) {
+            state = obj.region;
+            stateCode = obj.region_iso_code;
+        });
+    const response = await fetch(`https://rapidapi.p.rapidapi.com/search.php?s=${drinkName}`, {
+        method: "GET",
+        headers: {
+            "x-rapidapi-host": "the-cocktail-db.p.rapidapi.com",
+            "x-rapidapi-key": "8ce3a20de4msh15f5b95429d72f4p184767jsn43b2ad9e2651"
+        }
+    });
+    const data = await response.json();
+    return data.drinks[0];
+}
+
+//sleep function for short delay
+function sleep(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 
 //@options
 //grabs available search terms and print as checklist
@@ -234,6 +467,7 @@ const printCarousel = (obj) => {
             container.innerHTML += `<div id=${drinkId} class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3" onClick="makeCustomPage(${drinkId})">
                                       <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
                                       <p>${drinkName}</p>
+                                      <p>${drinkTags}</p>
                                       </div>`
             //printIngredients(drinkIngredients, drinkAmounts)
         })
@@ -264,10 +498,3 @@ const makeCustomPage = (drinkId) => {
 }
 
 //@main
-window.addEventListener("load", printOptions)
-const form = document.getElementById("selection_container")
-form.addEventListener("submit", (evt) => {
-    evt.preventDefault()
-    fetchSearch(formatQuery());
-    form.reset()
-})
