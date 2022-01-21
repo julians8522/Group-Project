@@ -1,5 +1,348 @@
+/* title, header, & font styles */
+
+.titleBoxDiv {
+	border: 3px groove #691613;
+	background-image: url(https://i.imgur.com/Dthb0gW.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 100%;
+	height: 400px;
+}
+
+#titleBoxText {
+	color: #f2a102;
+	padding-top: 10%;
+	text-align: center;
+	font-family: "Oswald";
+	font-size: 48px;
+}
+
+h1 {
+	font-family: "Oswald";
+	color: #691613;
+	font-size: 48px;
+	text-align: center;
+}
+
+p {
+	font-family: "Oswald";
+	font-size: 16px;
+	text-indent: 20px;
+}
+
+/* parallax styles */
+.yellow {
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+	background-color: #f2a102;
+}
+
+.parallaxRow {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+	font-family: "Oswald";
+}
+
+/* I don't eat hamburgers anyway so have a nav bar instead */
+.navigationBox {
+	display: block;
+	width: 100vw;
+	height: 5%;
+	float: left;
+	background-color: #691613;
+	font-size: 17px;
+	text-align: center;
+}
+
+.navigationBox a {
+	text-decoration: none;
+	color: #fff;
+}
+
+.navigationBox a:hover {
+	color: #f2a102;
+}
+
+/* main content divs */
+.indexContentDiv {
+	color: #000;
+	border: 2px groove #691613;
+	width: 100%;
+	font-family: "Oswald";
+	position: absolute;
+	float: right;
+	overflow: auto;
+}
+
+/* not sure why this got doubled but I am squeamish about losing things
+.recipeContentDiv {
+    color: #000;
+    border: 2px groove #691613;
+    width: 100%;
+    font-family: "Oswald";
+    position: absolute;
+    float: right;
+}*/
+
+/* this carousel will be the death of me :) */
+.recipeCarouselDiv {
+	border: 2px solid #691613;
+	color: #000;
+	width: 82%;
+	font-family: Oswald;
+	float: right;
+}
+
+/* for the recipes user saves */
+.recipesForReal {
+	width: 99%;
+	float: right;
+	position: static;
+	margin-top: 2%;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #691613;
+	border-image: initial;
+	margin-left: 4px;
+}
+
+/*aggregated shopping list which is no longer aggrevating me*/
+.theList {
+	color: black;
+	width: 15%;
+	float: left;
+	position: static;
+	border-width: 1px;
+	border-style: solid;
+	border-color: rgb(105, 22, 19);
+	border-image: initial;
+	overflow: auto;
+	margin-left: 10px;
+}
+
+.theList ul {
+	list-style-type: none;
+}
+
+/* it's a box.  with a form in it */
+.formBox {
+	border-width: auto;
+	text-align: center;
+	float: right;
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+input[type="submit"],
+input[type="reset"] {
+	background-color: #691613;
+	color: white;
+	cursor: pointer;
+	border-style: none;
+	padding: 4px 8px;
+	text-decoration: none;
+	margin: 4px 2px;
+	border-radius: 16px;
+}
+
+/* pretty much what it says on the tin*/
+.footer {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 30px;
+	background-color: #691613;
+	color: #f2a102;
+	text-align: center;
+	font-size: 10px;
+	font-family: "Oswald";
+	padding-top: 9px;
+}
+
+/*gets rid of scrollbars in Firefox, IE, Edge, Chrome, and Safari */
+.example {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.example::-webkit-scrollbar {
+	display: none;
+}
+
 body {
-	font-family: 'Open Sans', sans-serif;
+	overflow-x: hidden;
+}
+
+/* code by Iatek LLC 2018 - CC 2.0 License - Attribution required
+    code customized by Azmind.com
+    obtained on 1/19/22 at https://azmind.com/bootstrap-carousel-multiple-items/
+    CAROUSEL START*/
+
+@media (min-width: 768px) and (max-width: 991px) {
+	/* Show 4th slide on md if col-md-4*/
+	.carousel-inner .active.col-md-4.carousel-item + .carousel-item + .carousel-item + .carousel-item {
+		position: absolute;
+		top: 0;
+		right: -33.3333%;
+		/*change this with javascript in the future*/
+		z-index: -1;
+		display: block;
+		visibility: visible;
+	}
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+	/* Show 3rd slide on sm if col-sm-6*/
+	.carousel-inner .active.col-sm-6.carousel-item + .carousel-item + .carousel-item {
+		position: absolute;
+		top: 0;
+		right: -50%;
+		/*change this with javascript in the future*/
+		z-index: -1;
+		display: block;
+		visibility: visible;
+	}
+}
+
+@media (min-width: 576px) {
+	.carousel-item {
+		margin-right: 0;
+	}
+
+	/* show 2 items */
+	.carousel-inner .active + .carousel-item {
+		display: block;
+	}
+
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item {
+		transition: none;
+	}
+
+	.carousel-inner .carousel-item-next {
+		position: relative;
+		transform: translate3d(0, 0, 0);
+	}
+
+	/* left or forward direction */
+	.active.carousel-item-left + .carousel-item-next.carousel-item-left,
+	.carousel-item-next.carousel-item-left + .carousel-item,
+	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item {
+		position: relative;
+		transform: translate3d(-100%, 0, 0);
+		visibility: visible;
+	}
+
+	/* farthest right hidden item must be also positioned for animations */
+	.carousel-inner .carousel-item-prev.carousel-item-right {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: -1;
+		display: block;
+		visibility: visible;
+	}
+
+	/* right or prev direction */
+	.active.carousel-item-right + .carousel-item-prev.carousel-item-right,
+	.carousel-item-prev.carousel-item-right + .carousel-item,
+	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item {
+		position: relative;
+		transform: translate3d(100%, 0, 0);
+		visibility: visible;
+		display: block;
+		visibility: visible;
+	}
+}
+
+/* MD */
+@media (min-width: 768px) {
+	/* show 3rd of 3 item slide */
+	.carousel-inner .active + .carousel-item + .carousel-item {
+		display: block;
+	}
+
+	/* show 3rd of 3 item slide */
+	.carousel-inner .active + .carousel-item + .carousel-item {
+		display: block;
+	}
+
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item {
+		transition: none;
+	}
+
+	.carousel-inner .carousel-item-next {
+		position: relative;
+		transform: translate3d(0, 0, 0);
+	}
+
+	/* left or forward direction */
+	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
+		position: relative;
+		transform: translate3d(-100%, 0, 0);
+		visibility: visible;
+	}
+
+	/* right or prev direction */
+	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item {
+		position: relative;
+		transform: translate3d(100%, 0, 0);
+		visibility: visible;
+		display: block;
+		visibility: visible;
+	}
+}
+
+/* LG */
+@media (min-width: 991px) {
+	/* show 4th item */
+	.carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
+		display: block;
+	}
+
+	/* show 4th item */
+	.carousel-inner .active + .carousel-item + .carousel-item + .carousel-item {
+		display: block;
+	}
+
+	.carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item + .carousel-item {
+		transition: none;
+	}
+
+	/* Show 5th slide on lg if col-lg-3 */
+	.carousel-inner .active.col-lg-3.carousel-item + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+		position: absolute;
+		top: 0;
+		right: -25%;
+		/*change this with javascript in the future*/
+		z-index: -1;
+		display: block;
+		visibility: visible;
+	}
+
+	/* left or forward direction */
+	.carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+		position: relative;
+		transform: translate3d(-100%, 0, 0);
+		visibility: visible;
+	}
+
+	/* right or prev direction //t - previous slide direction last item animation fix */
+	.carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item + .carousel-item {
+		position: relative;
+		transform: translate3d(100%, 0, 0);
+		visibility: visible;
+		display: block;
+		visibility: visible;
+	}
+}
+
+/* END OF CAROUSEL */
+
+body {
+	font-family: "Open Sans", sans-serif;
 	font-size: 15px;
 	font-weight: 400;
 	color: #888;
@@ -15,7 +358,7 @@ a {
 	color: #a365bc;
 	border-bottom: 1px dashed #a365bc;
 	text-decoration: none;
-	transition: all .3s;
+	transition: all 0.3s;
 }
 
 a:hover,
@@ -64,7 +407,6 @@ img {
 	text-shadow: none;
 }
 
-
 /***** General style, all sections *****/
 
 .section-container {
@@ -104,7 +446,6 @@ img {
 	padding-top: 60px;
 }
 
-
 /***** Divider *****/
 
 .divider-1 span {
@@ -113,12 +454,11 @@ img {
 	border-bottom: 1px dotted #aaa;
 }
 
-
 /***** Top menu *****/
 
 .navbar {
 	background: #444;
-	transition: all .6s;
+	transition: all 0.6s;
 	backface-visibility: hidden;
 }
 
@@ -155,7 +495,6 @@ img {
 	text-indent: -99999px;
 }
 
-
 /***** Top content *****/
 
 .top-content {
@@ -167,7 +506,6 @@ img {
 .carousel-control-prev {
 	border: 0;
 }
-
 
 /***** Section 1 *****/
 
@@ -205,18 +543,17 @@ img {
 	-moz-border-radius: 50%;
 	-webkit-border-radius: 50%;
 	border-radius: 50%;
-	-o-transition: all .6s;
-	-moz-transition: all .6s;
-	-webkit-transition: all .6s;
-	-ms-transition: all .6s;
-	transition: all .6s;
+	-o-transition: all 0.6s;
+	-moz-transition: all 0.6s;
+	-webkit-transition: all 0.6s;
+	-ms-transition: all 0.6s;
+	transition: all 0.6s;
 }
 
 .section-1-box h3 {
 	margin-top: 0;
 	padding: 0 0 10px 0;
 }
-
 
 /***** Section 2 *****/
 
@@ -233,7 +570,6 @@ img {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }
-
 
 /***** Section 3 *****/
 
@@ -278,13 +614,11 @@ img {
 	padding: 0 0 10px 0;
 }
 
-
 /***** Footer *****/
 
 footer {
 	padding: 40px 0;
 }
-
 
 #flex_container {
 	display: flex;
@@ -294,4 +628,52 @@ footer {
 
 #form_submit_button {
 	float: right;
+}
+
+/*styles made initially for popular page */
+.body {
+	background-color: navy;
+}
+.container {
+	display: flex;
+	background-color: rgb(127, 130, 167);
+	margin: auto;
+	padding: 0;
+	justify-content: space-between;
+}
+
+#popList {
+	margin: opx;
+	list-style: none;
+	max-width: 25%;
+	text-align: center;
+	background-color: rgb(111, 115, 170);
+}
+#popList a {
+	color: black;
+	text-decoration: none;
+}
+#popList a:hover,
+#popList a:focus {
+	text-decoration: underline;
+}
+#ingList {
+	margin: 5px;
+	display: block;
+	list-style: none;
+	color: black;
+}
+#drinkContainer {
+	text-align: center;
+	max-width: 70%;
+}
+.info {
+	display: flex;
+	justify-content: space-evenly;
+	color: black;
+}
+#instructions {
+	font-size: 1.25em;
+	margin: 5px;
+	color: black;
 }
