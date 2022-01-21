@@ -26,7 +26,6 @@
     <script>
         const drinkId = localStorage.getItem("drinkId")
         const card = document.getElementsByClassName("card")[0]
-        console.log(drinkId)
         const url = `https://the-cocktail-db.p.rapidapi.com/lookup.php?i=${drinkId}`
         fetch(url, {
                 "method": "GET",
