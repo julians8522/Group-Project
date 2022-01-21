@@ -231,7 +231,7 @@ const printCarousel = (obj) => {
                 }
             }
             //actually print to the carousel card
-            container.innerHTML += `<div class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3">
+            container.innerHTML += `<div id=${drinkId} class="carousel-item col-12 col-sm-6 col-md-4 col-lg-3" onClick="makeCustomPage(${drinkId})">
                                       <img src="${drinkImageSource}" class="img-fluid mx-auto d-block" alt="${drinkName}">
                                       <p>${drinkName}</p>
                                       </div>`
@@ -240,6 +240,28 @@ const printCarousel = (obj) => {
         .catch(err => console.error(err));
 }
 
+//takes arrays of ingredients and prints them]
+const printIngredients = (ingArr, amtArr) => {
+    //clear out any previous list before filling with new ingredients
+    document.getElementById("ingList").innerHTML = "";
+    let liElts = []
+    for (let i = 0; i < ingArr.length; i++) {
+        liElts[i] = document.createElement("li")
+        if (amtArr) {
+            liElts[i].innerText = `${amtArr[i]} `
+        }
+        liElts[i].innerText += ingArr[i]
+        document.getElementById("ingList").appendChild(liElts[i])
+
+    }
+}
+
+//@custom Page
+//creates a custom page with drink id
+const makeCustomPage = (drinkId) => {
+    localStorage.setItem("drinkId", `${drinkId}`)
+    location.replace("./drink.html")
+}
 
 //@main
 window.addEventListener("load", printOptions)
